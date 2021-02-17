@@ -31,7 +31,8 @@ if(fs.existsSync(sessionSave)) { sessionData = require(sessionSave); };
 
 //Defining bot
 const bot = new Client({
-    session: sessionData
+    session: sessionData,
+    puppeteer: { args: ['--no-sandbox'] }
 });
 
 //QR Code gen event
