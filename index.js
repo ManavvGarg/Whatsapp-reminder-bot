@@ -1,5 +1,5 @@
 //Defining essential constants
-const { Client, Contact } = require("whatsapp-web.js");
+const { Client } = require("whatsapp-web.js");
 const tCode = require("qrcode-terminal")
 const figlet = require("figlet");
 const fs = require("fs");
@@ -31,8 +31,7 @@ if(fs.existsSync(sessionSave)) { sessionData = require(sessionSave); };
 
 //Defining bot
 const bot = new Client({
-    session: sessionData,
-    puppeteer: { args: ['--no-sandbox'] }
+    session: sessionData
 });
 
 //QR Code gen event
@@ -70,24 +69,24 @@ bot.on('disconnected', (reason) => {
 //============================================================= Message Event ================================================================
 bot.on("message", async(message) => {
     //Default automated message upon hi.
-    if(message.body.toLowerCase() === "hi") { return bot.sendMessage(message.from, "Hi! I am Xvee, Your personal reminder bot🤖. \n\nNice to meet you!\nIf you would like to access my help menu, use: \n\n*xv help*")};
+    if(message.body.toLowerCase() === "hi" || message.body.toLowerCase() === "hello" || message.body.toLowerCase() === "hey") { return bot.sendMessage(message.from, "Hi! I am Xvee, Your personal reminder bot🤖. \n\nNice to meet you!\nIf you would like to access my help menu, use: \n\n*xv help*")};
 
     //Help command
-    if(message.body.toLowerCase() === "xv help") { return bot.sendMessage(message.from, "*Help menu*\n\n1) How to set reminders\n\n2) Bot info\n\n3) Information about my creator!\n\nNow to select an option simply use: \n\nxv help 1 *OR* xv help 2 *OR* xv help 3") }
+    if(message.body.toLowerCase() === "xv help") { return bot.sendMessage(message.from, "*Help menu*\n\n1) How to set reminders ⏰\n\n2) Bot info ℹ️\n\n3) Information about my creator 👨‍💻\n\nNow to select an option simply use: \n\nxv help 1 *OR* xv help 2 *OR* xv help 3") }
 
     //Help comman: Option 1
     if(message.body.toLowerCase() === "xv help 1") {
-        return bot.sendMessage(message.from, "*Help: Set Reminders*\n\n*Usage:* \n\n'xv set <time> <your reminder>'");
+        return bot.sendMessage(message.from, "*Help: Set Reminders ⏰*\n\n*Usage:* \n\n*xv set <time> <your reminder>*");
     }
     
     //Help comman: Option 2
     if(message.body.toLowerCase() === "xv help 2") {
-        return bot.sendMessage(message.from, `*Information about me!*\n\n${botInfo}`);
+        return bot.sendMessage(message.from, `*Information about me! 🤖*\n\n${botInfo}`);
     }
     
     //Help comman: Option 3
     if(message.body.toLowerCase() === "xv help 3") {
-        return bot.sendMessage(message.from, `*Information about my creator!*\n\n${creatorInfo}`);
+        return bot.sendMessage(message.from, `*Information about my creator! 👨‍💻*\n\n${creatorInfo}`);
     }
 
     //set reminder command
@@ -102,8 +101,8 @@ bot.on("message", async(message) => {
 
             //test it for milliseconds and its length more than 3, to avoid setting time like: 123d OR 123m or any 3 digit time period
             var match = /^(-?(?:\d+)?\.?\d+) *(ms)?$/i.exec(t);
-            if(match) return bot.sendMessage(message.from, `The time you provided is incorrect! \n\nMake sure to use: \n\n*xv set 5<d *OR* h *OR* m> \n\nwhere 'd' represents days, \n\n'm' represents minutes, \n\n'h' represents hours.\n\nAlso make sure the value you provided should between 0 & 99"`)
-            if(t.length > 3) return bot.sendMessage(message.from, `The time you provided is incorrect! \n\nMake sure to use: \n\n*xv set 5<d *OR* h *OR* m> \n\nwhere 'd' represents days, \n\n'm' represents minutes, \n\n'h' represents hours.\n\nAlso make sure the value you provided should between 0 & 99"`)
+            if(match) return bot.sendMessage(message.from, `The time you provided is incorrect ❌ \n\nMake sure to use: \n\nxv set 5<d *OR* h *OR* m> \n\nwhere 'd' represents days, \n\n'm' represents minutes, \n\n'h' represents hours.\n\nAlso make sure the value you provided should between 0 & 99`)
+            if(t.length > 3) return bot.sendMessage(message.from, `The time you provided is incorrect ❌ \n\nMake sure to use: \n\nxv set 5<d *OR* h *OR* m> \n\nwhere 'd' represents days, \n\n'm' represents minutes, \n\n'h' represents hours.\n\nAlso make sure the value you provided should between 0 & 99`)
 
             //assigning variable to reminder message
             let setReminder = removePrefix.slice(4);
@@ -123,10 +122,10 @@ bot.on("message", async(message) => {
                      if(data.Reminder === null || data.Reminder === undefined) {
                          data.Reminder = setReminder;
                          data.save();
-                         bot.sendMessage(message.from, `Done! I will remind you after ${t} for: \n\n${setReminder}\n\nCya then!`)
+                         bot.sendMessage(message.from, `Done 👌 I will remind you after ${t} for: \n\n${setReminder}\n\nCya then👋`)
                      }
                      
-                     else { userDB.findOneAndDelete({ User: `${contact.number}` }); bot.sendMessage(message.from, "You already have set a reminder! At the time I can only set one reminder!") }
+                     else { return bot.sendMessage(message.from, "Uh-oh ❌\n\nYou already have set a reminder! At the time I can only set one reminder!") }
                  }
      
                  //If no data is found for the user, Create one.
@@ -136,7 +135,7 @@ bot.on("message", async(message) => {
                          Reminder: setReminder
                      });
                      newData.save();
-                     bot.sendMessage(message.from, `Done! I will remind you after ${t} for: \n\n${setReminder}\n\nCya then!`)
+                     bot.sendMessage(message.from, `Done 👌 I will remind you after ${t} for: \n\n${setReminder}\n\nCya then👋`)
                  }
              });
 
@@ -151,7 +150,7 @@ bot.on("message", async(message) => {
                      if(data) {
                          let reminderInfo = data.Reminder;
                          let number = `${data.User}@c.us`;
-                        return bot.sendMessage(number, `Hey there! You wanted me to remind you at this very moment about:\n\n${reminderInfo}`);
+                        return bot.sendMessage(number, `Reminder🔔:\n\n${reminderInfo}`);
                      }
                  });
 
@@ -169,13 +168,20 @@ bot.on("message", async(message) => {
  
  
              //IF an error occurs, Following will exec.
-         } catch (e) { console.log(e); bot.sendMessage(message.from, `The time you provided is incorrect! \n\nMake sure to use: \n\n*xv set 5<d *OR* h *OR* m> \n\nwhere 'd' represents days, \n\n'm' represents minutes, \n\n'h' represents hours.\n\nAlso make sure the value you provided should between 0 & 99`) }
+         } catch (e) { console.log(e); bot.sendMessage(message.from, `The time you provided is incorrect ❌ \n\nMake sure to use: \n\nxv set 5<s *OR* d *OR* h *OR* m> \n\nwhere \n\n's' represents seconds, \n\n'd' represents days, \n\n'm' represents minutes, \n\n'h' represents hours.\n\nAlso make sure the value you provided should between 0 & 99\n\nExample: xv set 1h buy groceries.`) }
 
 
 
 
     
     }
+
+    if (message.body.startsWith('!status ')) {
+        const contact = await message.getContact();
+        if(!contact.number === "919818094442") return;
+        const newStatus = message.body.split(' ')[1];
+        await bot.setStatus(newStatus);
+        message.reply(`Status was updated to *${newStatus}*`); }
 
 })
 
