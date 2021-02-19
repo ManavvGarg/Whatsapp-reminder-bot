@@ -6,7 +6,7 @@ const fs = require("fs");
 const ms = require("./functions/timeConvert");
 
 //Requiring bot information and creator information
-const { botInfo, creatorInfo, mongoURI} = require("./info")
+const { botInfo, creatorInfo, mongoURI, PREFIX } = require("./config")
 
 //Requiring mongoose for database creation/storage of information
 const mongoose = require("mongoose");
@@ -49,7 +49,8 @@ bot.on("authenticated", auth => {
 
 //Ready Event
 bot.on("ready", ()=>{
-    figlet.text(`Xvee ready!`, function (err, data) {
+    //Chnage the bot ready to anything you want :D
+    figlet.text(`Bot ready!`, function (err, data) {
         if (err) {
             console.log('Something went wrong');
             console.dir(err);
@@ -69,31 +70,31 @@ bot.on('disconnected', (reason) => {
 //============================================================= Message Event ================================================================
 bot.on("message", async(message) => {
     //Default automated message upon hi.
-    if(message.body.toLowerCase() === "hi" || message.body.toLowerCase() === "hello" || message.body.toLowerCase() === "hey") { return bot.sendMessage(message.from, "Hi! I am Xvee, Your personal reminder bot🤖. \n\nNice to meet you!\nIf you would like to access my help menu, use: \n\n*xv help*")};
+    if(message.body.toLowerCase() === "hi" || message.body.toLowerCase() === "hello" || message.body.toLowerCase() === "hey") { return bot.sendMessage(message.from, `Hi! I am Xvee, Your personal reminder bot🤖. \n\nNice to meet you!\nIf you would like to access my help menu, use: \n\n*${PREFIX}help*`)};
 
     //Help command
-    if(message.body.toLowerCase() === "xv help") { return bot.sendMessage(message.from, "*Help menu*\n\n1) How to set reminders ⏰\n\n2) Bot info ℹ️\n\n3) Information about my creator 👨‍💻\n\nNow to select an option simply use: \n\nxv help 1 *OR* xv help 2 *OR* xv help 3") }
+    if(message.body.toLowerCase() === `${PREFIX}help`) { return bot.sendMessage(message.from, `*Help menu*\n\n1) How to set reminders ⏰\n\n2) Bot info ℹ️\n\n3) Information about my creator 👨‍💻\n\nNow to select an option simply use: \n\n${PREFIX}help 1 *OR* ${PREFIX}help 2 *OR* ${PREFIX}help 3`) }
 
     //Help comman: Option 1
-    if(message.body.toLowerCase() === "xv help 1") {
-        return bot.sendMessage(message.from, "*Help: Set Reminders ⏰*\n\n*Usage:* \n\n*xv set <time> <your reminder>*");
+    if(message.body.toLowerCase() === `${PREFIX}help 1`) {
+        return bot.sendMessage(message.from, `*Help: Set Reminders ⏰*\n\n*Usage:* \n\n*${PREFIX}set <time> <your reminder>*`);
     }
     
     //Help comman: Option 2
-    if(message.body.toLowerCase() === "xv help 2") {
+    if(message.body.toLowerCase() === `${PREFIX}help 2`) {
         return bot.sendMessage(message.from, `*Information about me! 🤖*\n\n${botInfo}`);
     }
     
     //Help comman: Option 3
-    if(message.body.toLowerCase() === "xv help 3") {
+    if(message.body.toLowerCase() === `${PREFIX}help 3`) {
         return bot.sendMessage(message.from, `*Information about my creator! 👨‍💻*\n\n${creatorInfo}`);
     }
 
     //set reminder command
-    if(message.body.startsWith("xv set")) {
+    if(message.body.startsWith(`${PREFIX}set`)) {
         try { 
             //remove prefix "xv "
-            let removePrefix = message.body.replace("xv set", "");
+            let removePrefix = message.body.replace(`${PREFIX}set`, "");
 
             //get reminder time
             let setDays = message.body.slice(7, 10);
@@ -176,9 +177,11 @@ bot.on("message", async(message) => {
     
     }
 
+    //owner ONLY COMMAND BELOW.
+
     if (message.body.startsWith('!status ')) {
         const contact = await message.getContact();
-        if(!contact.number === "919818094442") return;
+        if(!contact.number === "YOUR PERSONAL NUMBER HERE TO MAKE THIS STATUS COMMAND OWNER ONLY COMMAND") return;
         const newStatus = message.body.split(' ')[1];
         await bot.setStatus(newStatus);
         message.reply(`Status was updated to *${newStatus}*`); }

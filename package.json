@@ -1,6 +1,6 @@
 {
-  "name": "xvee",
-  "version": "0.0.1",
+  "name": "whatsapp-reminder-bot",
+  "version": "1.0.1",
   "description": "WbBot- Reminder bot to get reminders straight on your phone!",
   "main": "index.js",
   "dependencies": {
