@@ -8,12 +8,12 @@
  - functions folder => The folder where the "time conversion" modules is saved. Don't touch. thanks. (Its the same npm package called 'ms')
 
 # NPM Packages used:-
- > whatsapp-web.js : https://github.com/pedroslopez/whatsapp-web.js/
- > figlet : https://www.npmjs.com/package/figlet
- > qrcode-terminal : https://www.npmjs.com/package/qrcode-terminal
- > Mongoose : https://www.npmjs.com/package/mongoose
- > fs
- > path
+ - whatsapp-web.js : https://github.com/pedroslopez/whatsapp-web.js/
+ - figlet : https://www.npmjs.com/package/figlet
+ - qrcode-terminal : https://www.npmjs.com/package/qrcode-terminal
+ - Mongoose : https://www.npmjs.com/package/mongoose
+ - fs
+ - path
 
 # Basic How-To:
  - Clone the repo.
